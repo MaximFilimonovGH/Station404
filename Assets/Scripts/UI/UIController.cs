@@ -25,7 +25,6 @@ public class UIController : MonoBehaviour
     public Slider healthSlider, thirstSlider;
 
     public Image fadeScreen;
-
     public float fadeSpeed = 2;
     private bool fadingToBlack, fadingFromBlack;
 
@@ -34,46 +33,17 @@ public class UIController : MonoBehaviour
     public GameObject pauseScreen;
     private PlayerController player;
 
-    // start level text
-    public bool needToShowStartLevelText = false;
-    public GameObject startLevelTextBox;
-    public GameObject menuBackgroundImage;
-    private bool startLevelTextShowing = false;
-
     // Start is called before the first frame update
     void Start()
     {
         // update vitals with current values
-        //UpdateHealth(PlayerVitalsController.instance.currentHealth, PlayerVitalsController.instance.maxHealth);
-        //UpdateThirst(PlayerVitalsController.instance.currentThirst, PlayerVitalsController.instance.maxThirst);
+        UpdateHealth(PlayerVitalsController.instance.currentHealth, PlayerVitalsController.instance.maxHealth);
+        UpdateThirst(PlayerVitalsController.instance.currentThirst, PlayerVitalsController.instance.maxThirst);
 
-        // disable fadescreen so that can select button through
         fadeScreen.enabled = false;
 
         // find player
         player = PlayerVitalsController.instance.GetComponent<PlayerController>();
-
-        // if first level show dialogue box and background from the start
-        if (needToShowStartLevelText)
-        {
-            startLevelTextShowing = true;
-            startLevelTextBox.SetActive(true);
-            if (menuBackgroundImage != null)
-            {
-                menuBackgroundImage.SetActive(true);
-            }
-            Time.timeScale = 0f;
-        }
-        else
-        {
-            startLevelTextShowing = false;
-            startLevelTextBox.SetActive(false);
-            if (menuBackgroundImage != null)
-            {
-                menuBackgroundImage.SetActive(false);
-            }
-            Time.timeScale = 1f;
-        }
     }
 
     // Update is called once per frame
@@ -103,61 +73,17 @@ public class UIController : MonoBehaviour
         {
             PauseUnpause();
         }
-
-        // if startLevelTextShowing player cannot move
-        if (startLevelTextShowing)
-        {
-            player.canMove = false;
-        }
-        else
-        {
-            player.canMove = true;
-        }
-        // if we pressed submit and start level text is showing
-        if (Input.GetButtonDown("Submit") && startLevelTextShowing)
-        {
-            StartTextBoxClose();
-        }
-    }
-    
-    // functions for operation with start level text
-    public void StartTextBoxClose()
-    {
-        StartCoroutine(StartGameLevelCo());
-    }
-
-    IEnumerator StartGameLevelCo()
-    {
-        // unfreeze time
-        Time.timeScale = 1f;
-
-        startFadeToBlack();
-
-        yield return new WaitForSeconds(1.5f);
-
-        // close dialogue box
-        startLevelTextBox.SetActive(false);
-        startLevelTextShowing = false;
-        // if there is a background image covering the game as well (level 0) then deactivate it
-        if (menuBackgroundImage != null)
-        {
-            menuBackgroundImage.SetActive(false);
-        }
-
-        startFadeFromBlack();
     }
 
     // functions to manipulate vital sliders
     public void UpdateHealth(int currentHealth, int maxHealth)
     {
-        Debug.Log("called");
         healthSlider.maxValue = maxHealth;
         healthSlider.value = currentHealth;
     }
 
     public void UpdateThirst(int currentThirst, int maxThirst)
     {
-        Debug.Log("called");
         thirstSlider.maxValue = maxThirst;
         thirstSlider.value = currentThirst;
     }

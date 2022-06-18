@@ -21,7 +21,8 @@ public class PlayerController : MonoBehaviour
     // abilities
     private PlayerAbilityTracker abilities;
     // jump related
-    private bool canDoubleJump;
+    private bool firstJumpDone, doubleJumpFallingDone;
+    public int doubleJumpCost = 1;
     // dash related
     public float dashSpeed, dashTime, dashCooldown;
     private float dashCounter, dashRechargeCounter;
@@ -87,6 +88,8 @@ public class PlayerController : MonoBehaviour
                     ShowAfterImage();
                 }
 
+                AudioManager.instance.PlaySFXAdjusted(4);
+
                 dashRechargeCounter = dashCooldown;
             }
             // if not dashing
@@ -108,24 +111,34 @@ public class PlayerController : MonoBehaviour
 
             // check if on ground
             isOnGround = Physics2D.OverlapCircle(groundPoint.position, .2f, whatIsGround);
+            // if on ground, reload ability to do double jump when falling
+            if (isOnGround)
+            {
+                doubleJumpFallingDone = false;
+            }
 
             // jump if on ground
-            if (Input.GetButtonDown("Jump") && (isOnGround || (canDoubleJump && abilities.canDoubleJump)))
+            if (Input.GetButtonDown("Jump") && (isOnGround || (firstJumpDone && abilities.canDoubleJump) || (!firstJumpDone && abilities.canDoubleJump && !doubleJumpFallingDone)))
             {
                 // if on ground level then jump first time
                 if (isOnGround)
                 {
-                    canDoubleJump = true; // set that double jump is possible
+                    firstJumpDone = true; // set that double jump is possible
+                    thePlayer.velocity = new Vector2(thePlayer.velocity.x, jumpForce);
+                    AudioManager.instance.PlaySFXAdjusted(1);
                 }
                 // now we are double jumping
                 else
                 {
-                    canDoubleJump = false; // set that double jump is not possible
+                    PlayerVitalsController.instance.DamagePlayerVital(doubleJumpCost, "thirst");
+                    firstJumpDone = false; // set that double jump is not possible
+                    doubleJumpFallingDone = true; // set that double jump while falling is not possible
                     thePlayerAnimations.SetTrigger("doubleJump");
-                }
-
-                thePlayer.velocity = new Vector2(thePlayer.velocity.x, jumpForce);
+                    thePlayer.velocity = new Vector2(thePlayer.velocity.x, 1.3f * jumpForce);
+                    AudioManager.instance.PlaySFXAdjusted(2);
+                } 
             }
+
 
             // shooting
             if (Input.GetButtonDown("Fire1"))
@@ -133,12 +146,7 @@ public class PlayerController : MonoBehaviour
                 ShotController shot = Instantiate(shotToFire, shotPoint.position, shotPoint.rotation);
                 shot.moveDirection = new Vector2(transform.localScale.x, 0f);
                 thePlayerAnimations.SetTrigger("shotFired");
-            }
-
-            // dying on Enter
-            if (Input.GetButtonDown("Fire3"))
-            {
-                PlayerVitalsController.instance.DamagePlayerVital(5, "health");
+                AudioManager.instance.PlaySFXAdjusted(0);
             }
 
         } else

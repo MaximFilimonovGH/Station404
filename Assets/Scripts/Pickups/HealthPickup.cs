@@ -20,6 +20,7 @@ public class HealthPickup : MonoBehaviour
             } else
             {
                 PlayerVitalsController.instance.healPlayerVital(healAmount, "health");
+                AudioManager.instance.PlaySFX(3);
 
                 if (pickupEffect != null)
                 {

@@ -342,7 +342,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 219549850485283773}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Window 2
   m_TagString: Window
   m_Icon: {fileID: 0}

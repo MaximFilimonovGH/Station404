@@ -23,6 +23,7 @@ public class DoorController : MonoBehaviour
     public BoxCollider2D exitObjectCollider;
 
     public int doorNumber;
+    public string[] messages; 
 
     // Start is called before the first frame update
     void Start()
@@ -31,42 +32,35 @@ public class DoorController : MonoBehaviour
         gameProgress = PlayerVitalsController.instance.GetComponent<PlayerProgressTracker>();
 
         // open door from start if correct doorOpen progress tracked
-        if (doorNumber == 0)
+        if (gameProgress.doorsOpen[doorNumber])
         {
-            if (gameProgress.zeroDoorOpen)
-            {
-                doorAnim.SetBool("doorOpen", true);
-                isDoorOpen = true;
-                exitObjectCollider.enabled = false;
-            }
-            else
-            {
-                doorAnim.SetBool("doorOpen", false);
-                isDoorOpen = false;
-                exitObjectCollider.enabled = true;
-            }
+            doorAnim.SetBool("doorOpen", true);
+            isDoorOpen = true;
+            exitObjectCollider.enabled = false;
+        }
+        else
+        {
+            doorAnim.SetBool("doorOpen", false);
+            isDoorOpen = false;
+            exitObjectCollider.enabled = true;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (doorNumber == 0)
+        if (gameProgress.doorsOpen[doorNumber])
         {
-            if (gameProgress.zeroDoorOpen)
-            {
-                doorAnim.SetBool("doorOpen", true);
-                isDoorOpen = true;
-                exitObjectCollider.enabled = false;
-            }
-            else
-            {
-                doorAnim.SetBool("doorOpen", false);
-                isDoorOpen = false;
-                exitObjectCollider.enabled = true;
-            }
+            doorAnim.SetBool("doorOpen", true);
+            isDoorOpen = true;
+            exitObjectCollider.enabled = false;
         }
-        // space for more doors
+        else
+        {
+            doorAnim.SetBool("doorOpen", false);
+            isDoorOpen = false;
+            exitObjectCollider.enabled = true;
+        }
 
         if (playerExiting)
         {
@@ -103,6 +97,7 @@ public class DoorController : MonoBehaviour
         player.thePlayerAnimations.enabled = true;
 
         UIController.instance.startFadeFromBlack();
+        // UIController.instance.messages = messages;
 
         PlayerPrefs.SetString("ContinueLevel", levelToLoad);
         PlayerPrefs.SetFloat("PosX", exitPoint.position.x);

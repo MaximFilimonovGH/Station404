@@ -21,6 +21,8 @@ public class WaterPickup : MonoBehaviour
             {
                 PlayerVitalsController.instance.healPlayerVital(healAmount, "thirst");
 
+                AudioManager.instance.PlaySFX(3);
+
                 if (pickupEffect != null)
                 {
                     Instantiate(pickupEffect, transform.position, Quaternion.identity);

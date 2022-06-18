@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Leave
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2c8bc66e9bff93f47a064d942e3f8571, type: 2}
-  m_sharedMaterial: {fileID: 2490555418479347445, guid: 2c8bc66e9bff93f47a064d942e3f8571, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0c895a33b26378143bdf9db83888d874, type: 2}
+  m_sharedMaterial: {fileID: -4622678391388969896, guid: 0c895a33b26378143bdf9db83888d874, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -258,8 +258,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ConsoleController, Assembly-CSharp
-        m_MethodName: CloseConsole
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+        m_MethodName: StartTextBoxClose
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

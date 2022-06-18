@@ -59,7 +59,7 @@ public class RespawnController : MonoBehaviour
         player.transform.position = respawnPoint;
         player.SetActive(true);
 
-        PlayerVitalsController.instance.fillVital("health");
-        PlayerVitalsController.instance.fillVital("thirst");
+        PlayerVitalsController.instance.fillVital("health", "respawn");
+        PlayerVitalsController.instance.fillVital("thirst", "respawn");
     }
 }

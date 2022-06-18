@@ -38,10 +38,26 @@ public class PlayerVitalsController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentHealth = startingHealth;
-        currentThirst = startingThirst;
-        UIController.instance.UpdateHealth(currentHealth, maxHealth);
-        UIController.instance.UpdateThirst(currentThirst, maxThirst);
+        if (PlayerPrefs.HasKey("Health"))
+        {
+            currentHealth = PlayerPrefs.GetInt("Health");
+        } else
+        {
+            currentHealth = startingHealth;
+        }
+        if (PlayerPrefs.HasKey("Thirst"))
+        {
+            currentThirst = PlayerPrefs.GetInt("Thirst");
+        }
+        else
+        {
+            currentThirst = startingThirst;
+        }
+        if (UIController.instance != null)
+        {
+            UIController.instance.UpdateHealth(currentHealth, maxHealth);
+            UIController.instance.UpdateThirst(currentThirst, maxThirst);
+        }
     }
 
     // Update is called once per frame
@@ -74,6 +90,7 @@ public class PlayerVitalsController : MonoBehaviour
             if (invincibilityCounter <= 0)
             {
                 currentHealth -= damageAmount;
+                AudioManager.instance.PlaySFXAdjusted(6);
 
                 if (currentHealth <= 0)
                 {
@@ -87,6 +104,7 @@ public class PlayerVitalsController : MonoBehaviour
                 }
             }
             UIController.instance.UpdateHealth(currentHealth, maxHealth);
+            PlayerPrefs.SetInt("Health", currentHealth);
         }
         else if (vitalSignal == "thirst")
         {
@@ -98,21 +116,35 @@ public class PlayerVitalsController : MonoBehaviour
                 RespawnController.instance.Respawn();
             }
             UIController.instance.UpdateThirst(currentThirst, maxThirst);
+            PlayerPrefs.SetInt("Thirst", currentThirst);
         }
-
     }
 
-    public void fillVital(string vitalSignal)
+    public void fillVital(string vitalSignal, string keyWord)
     {
-        if (vitalSignal == "health")
+        if (vitalSignal == "health" && keyWord == "respawn")
+        {
+            currentHealth = maxHealth / 2;
+            UIController.instance.UpdateHealth(currentHealth, maxHealth);
+            PlayerPrefs.SetInt("Health", currentHealth);
+        }
+        else if (vitalSignal == "thirst" && keyWord == "respawn")
+        {
+            currentThirst = maxThirst / 2;
+            UIController.instance.UpdateThirst(currentThirst, maxThirst);
+            PlayerPrefs.SetInt("Thirst", currentThirst);
+        }
+        else if (vitalSignal == "health" && keyWord == "fridge")
         {
             currentHealth = maxHealth;
             UIController.instance.UpdateHealth(currentHealth, maxHealth);
+            PlayerPrefs.SetInt("Health", currentHealth);
         }
-        else if (vitalSignal == "thirst")
+        else if (vitalSignal == "thirst" && keyWord == "fridge")
         {
             currentThirst = maxThirst;
             UIController.instance.UpdateThirst(currentThirst, maxThirst);
+            PlayerPrefs.SetInt("Thirst", currentThirst);
         }
     }
 
@@ -127,6 +159,7 @@ public class PlayerVitalsController : MonoBehaviour
                 currentHealth = maxHealth;
             }
             UIController.instance.UpdateHealth(currentHealth, maxHealth);
+            PlayerPrefs.SetInt("Health", currentHealth);
         }
         else if (vitalSignal == "thirst")
         {
@@ -136,6 +169,7 @@ public class PlayerVitalsController : MonoBehaviour
                 currentThirst = maxThirst;
             }
             UIController.instance.UpdateThirst(currentThirst, maxThirst);
+            PlayerPrefs.SetInt("Thirst", currentThirst);
         }
         
     }

@@ -22,6 +22,11 @@ public class ShotController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.tag == "Enemy")
+        {
+            other.GetComponent<EnemyHealthController>().DamageEnemy(damageAmount);
+        }
+
         if (other.tag == "Window")
         {
             if (windowShatterEffect != null)
