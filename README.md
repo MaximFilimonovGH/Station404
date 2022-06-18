@@ -4,4 +4,4 @@ Station 404 is an action-adventure hand-painted platformer across a mysterious r
 
 # More info
 
-More information can be found here: https://constellation-mw.itch.io/station-404
+More information can be found here (including working prototype): https://constellation-mw.itch.io/station-404
